@@ -1,0 +1,133 @@
+* 1 Introduction to Data Science
+** Assignment 2
+*** Part 1
+   Loads the olympics dataset (olympics.csv), which was derived from the Wikipedia entry on [[https://en.wikipedia.org/wiki/All-time_Olympic_Games_medal_table][All Time Olympic Games Medals]], and does some basic data cleaning. 
+**** Questions [0/4]
+    - [ ] Which country has won the most gold medals in summer games?
+    - [ ] Which country had the biggest difference between their summer and winter gold medal counts?
+    - [ ] Which country has the biggest difference between their summer gold medal counts and winter gold medal counts relative to their total gold medal count?
+    - [ ] Write a function that creates a Series called "Points" which is a weighted value where each gold medal (`Gold.2`) counts for 3 points, silver medals (`Silver.2`) for 2 points, and bronze medals (`Bronze.2`) for 1 point.
+*** Part 2
+    For the next set of questions, we will be using census data from the [[http://www.census.gov/popest/data/counties/totals/2015/CO-EST2015-alldata.html][United States Census Bureau]]. Counties are political and geographic subdivisions of states in the United States. This dataset contains population data for counties and states in the US from 2010 to 2015. [[http://www.census.gov/popest/data/counties/totals/2015/files/CO-EST2015-alldata.pdf][See this document]] for a description of the variable names.
+**** Questions [/]
+     - [ ] Which state has the most counties in it? (hint: consider the sumlevel key carefully! You'll need this for future questions too...)
+     - [ ] Only looking at the three most populous counties for each state, what are the three most populous states (in order of highest population to lowest population)? Use =CENSUS2010POP=.
+     - [ ] Which county has had the largest absolute change in population within the period 2010-2015? (Hint: population values are stored in columns =POPESTIMATE2010= through =POPESTIMATE2015=, you need to consider all six columns.)
+     - [ ] In this datafile, the United States is broken up into four regions using the "REGION" column. Create a query that finds the counties that belong to regions 1 or 2, whose name starts with 'Washington', and whose =POPESTIMATE2015= was greater than their =POPESTIMATE2014=.
+** Assignment 3
+*** Energy indicators
+Load the energy data from the file `Energy Indicators.xls`, which is a list of indicators of energy supply and renewable electricity production from the [[http://unstats.un.org/unsd/environment/excel_file_tables/2013/Energy%20Indicators.xls][United Nations]] for the year 2013, and should be put into a DataFrame with the variable name of **energy**.
+  - [X] make sure to exclude the footer and header information from the datafile. 
+  - [X] the first two columns are unneccessary, so you should get rid of them
+  - [X] and you should change the column labels so that the columns are:  =['Country', 'Energy Supply', 'Energy Supply per Capita', '% Renewable']=
+  - [X] Convert `Energy Supply` to gigajoules (there are 1,000,000 gigajoules in a petajoule). 
+  - [X] For all countries which have missing data (e.g. data with "...") make sure this is reflected as `np.NaN` values.
+
+  Rename the following list of countries (for use in later questions):
+
+  | Original                                                 | Updated          |
+  |----------------------------------------------------------+------------------|
+  | "Republic of Korea"                                      | "South Korea"    |
+  | "United States of America"                               | "United States"  |
+  | "United Kingdom of Great Britain and Northern Ireland19" | "United Kingdom" |
+  | "China, Hong Kong Special Administrative Region3"        | "Hong Kong"      |
+
+  There are also several countries with numbers and/or parenthesis in their name. Be sure to remove these, 
+*** GDP Data
+Next, load the GDP data from the file `world_bank.csv`, which is a csv containing countries' GDP from 1960 to 2015 from [[http://data.worldbank.org/indicator/NY.GDP.MKTP.CD][the World Bank]]. Call this DataFrame *GDP*. 
+
+   * Use only the last 10 years (2006-2015) of GDP data 
+   * Make sure to skip the header, and rename the following list of countries:
+
+     | Original               | Updated       |
+     |------------------------+---------------|
+     | "Korea, Rep."          | "South Korea" |
+     | "Iran, Islamic Rep."   | "Iran"        |
+     | "Hong Kong SAR, China" | "Hong Kong"   |
+*** Sciamgo Data
+   Finally, load the [[http://www.scimagojr.com/countryrank.php?category=2102][Sciamgo Journal and Country Rank data for Energy Engineering and Power Technology]] from the file `scimagojr-3.xlsx`, which ranks countries based on their journal contributions in the aforementioned area. Call this DataFrame *ScimEn*.
+*** The combined data
+Join the three datasets: GDP, Energy, and ScimEn into a new dataset (using the intersection of country names). 
+   
+   The index of this DataFrame should be the name of the country, and the columns should be ['Rank', 'Documents', 'Citable documents', 'Citations', 'Self-citations', 'Citations per document', 'H index', 'Energy Supply', 'Energy Supply per Capita', '% Renewable', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015'].
+
+   *This function should return a DataFrame with 20 columns and 15 entries.*
+
+Answer the following questions in the context of only the top 15 countries by Scimagojr Rank (aka the DataFrame returned by `answer_one()`)
+*** Questions [0/8]
+    - [ ] What is the average GDP over the last 10 years for each country? (exclude missing values from this calculation.)
+    - [ ] By how much had the GDP changed over the 10 year span for the country with the 6th largest average GDP?
+    - [ ] What is the mean /Energy Supply per Capita/?
+    - [ ] What country has the maximum % Renewable and what is the percentage?
+    - [ ] Create a new column that is the ratio of Self-Citations to Total Citations. /What is the maximum value for this new column, and what country has the highest ratio?/
+    - [ ] Create a column that estimates the population using Energy Supply and Energy Supply per capita. /What is the third most populous country according to this estimate?/
+    - [ ] Create a column that estimates the number of citable documents per person. 
+    /What is the correlation between the number of citable documents per capita and the energy supply per capita? Use the `.corr()` method, (Pearson's correlation)./
+    *(Optional: Use the built-in function `plot9()` to visualize the relationship between Energy Supply per Capita vs. Citable docs per Capita)*
+    - [ ] Create a new column with a 1 if the country's % Renewable value is at or above the median for all countries in the top 15, and a 0 if the country's % Renewable value is below the median.
+    - [ ] Use the following dictionary to group the Countries by Continent, then create a dateframe that displays the sample size (the number of countries in each continent bin), and the sum, mean, and std deviation for the estimated population of each country.
+
+  #+BEGIN_SRC ipython :session assignment3 :results none
+    ContinentDict  = {'China':'Asia', 
+                      'United States':'North America', 
+                      'Japan':'Asia', 
+                      'United Kingdom':'Europe', 
+                      'Russian Federation':'Europe', 
+                      'Canada':'North America', 
+                      'Germany':'Europe', 
+                      'India':'Asia',
+                      'France':'Europe', 
+                      'South Korea':'Asia', 
+                      'Italy':'Europe', 
+                      'Spain':'Europe', 
+                      'Iran':'Asia',
+                      'Australia':'Australia', 
+                      'Brazil':'South America'}
+   #+END_SRC
+  - [ ] Cut % Renewable into 5 bins. Group Top15 by the Continent, as well as these new % Renewable bins. How many countries are in each of these groups?
+  - [ ] Convert the Population Estimate series to a string with thousands separator (using commas). Do not round the results.
+  - [ ] Use the built in function =plot_optional()= to see an example visualization.
+
+   #+BEGIN_SRC ipython :session assignment3 :file renewable_scatter.png
+     def plot_optional():
+         Top15 = answer_one()
+         bubble_size = 6 * Top15['2014']/10**10
+         ASIA = '#e41a1c'
+         NORTH_AMERICA = '#377eb8'
+         EUROPE = '#4daf4a'
+         AUSTRALIA = '#dede00'
+         SOUTH_AMERICA = '#ff7f00'
+         ax = Top15.plot(x='Rank', y='% Renewable', kind='scatter', 
+                         c=[ASIA, NORTH_AMERICA, ASIA, EUROPE,EUROPE,
+                            NORTH_AMERICA,EUROPE,'#e41a1c',
+                            EUROPE, ASIA,EUROPE,EUROPE, ASIA,
+                            AUSTRALIA, SOUTH_AMERICA],
+                         xticks=range(1,16), s=bubble_size, alpha=.75,
+                         figsize=[16,6]);
+
+         # print country name centered in bubble
+         for i, txt in enumerate(Top15.index):
+             ax.annotate(txt, [Top15['Rank'][i], Top15['% Renewable'][i]], ha='center')
+     plot_optional() # Be sure to comment out plot_optional() before submitting the assignment!
+   #+END_SRC
+
+   #+RESULTS:
+   [[file:renewable_scatter.png]]
+   This is an example of a visualization that can be created to help understand the data. This is a bubble chart showing /% Renewable vs. Rank/. The size of the bubble corresponds to the countries' 2014 GDP, and the color corresponds to the continent.
+
+
+** Assignment 4
+This assignment takes three sources of data to see if housing prices in university towns are affected less by recessions.
+ - A /quarter/ is a specific three month period, Q1 is January through March, Q2 is April through June, Q3 is July through September, Q4 is October through December.
+ - A /recession/ is defined as starting with two consecutive quarters of GDP decline, and ending with two consecutive quarters of GDP growth.
+ - A /recession bottom/ is the quarter within a recession which had the lowest GDP.
+ - A /university town/ is a city which has a high percentage of university students compared to the total population of the city.
+ 
+*** *Hypothesis*: University towns have their mean housing prices less effected by recessions. Run a t-test to compare the ratio of the mean price of houses in university towns the quarter before the recession starts compared to the recession bottom. (~price_ratio=quarter_before_recession/recession_bottom~)
+*** Data Files
+ The following data files are available for this assignment:
+ * From the [[http://www.zillow.com/research/data/][Zillow research data site]] there is housing data for the United States. In particular the datafile for [[http://files.zillowstatic.com/research/public/City/City_Zhvi_AllHomes.csv][all homes at a city level]], /City_Zhvi_AllHomes.csv/, has median home sale prices at a fine grained level.
+ * From the Wikipedia page on college towns is a list of [[https://en.wikipedia.org/wiki/List_of_college_towns#College_towns_in_the_United_States][university towns in the United States]] which has been copy and pasted into the file /university_towns.txt/.
+ * From the Bureau of Economic Analysis, US Department of Commerce, the [[http://www.bea.gov/national/index.htm#gdp][GDP over time]] of the United States in current dollars (use the chained value in 2009 dollars), in quarterly intervals, is in the file /gdplev.xls/. For this assignment, only look at GDP data from the first quarter of 2000 onward.
+*** The Goal
+    Calculate a confidence interval and do a hypothesis test.

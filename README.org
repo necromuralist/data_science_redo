@@ -1,0 +1,3 @@
+#+TITLE: Data Analysis With Python Re-do
+
+This is a re-creation of things similar to what I did for the [[https://www.coursera.org][Coursera]] *Data Analysis with Python* course. I had the original assignments on GitHub, but then found out that this is considered a violation of their code-of-conduct so I made it private. I'm going to try and answer similar questions with different data sets.
