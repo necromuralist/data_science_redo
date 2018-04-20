@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Data Science With Python Re-Do (Posts about data)</title><link>https://necromuralist.github.io/data_science_redo/</link><description></description><atom:link href="https://necromuralist.github.io/data_science_redo/categories/cat_data.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Fri, 20 Apr 2018 02:55:42 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>International Olympiad in Informatics</title><link>https://necromuralist.github.io/data_science_redo/posts/international-olympiad-in-informatics/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-org4d5490c" class="outline-2"&gt;
-&lt;h2 id="org4d5490c"&gt;Introduction&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org4d5490c"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Data Science With Python Re-Do (Posts about data)</title><link>https://necromuralist.github.io/data_science_redo/</link><description></description><atom:link href="https://necromuralist.github.io/data_science_redo/categories/cat_data.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Fri, 20 Apr 2018 18:44:11 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>International Olympiad in Informatics</title><link>https://necromuralist.github.io/data_science_redo/posts/international-olympiad-in-informatics/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-org4044b14" class="outline-2"&gt;
+&lt;h2 id="org4044b14"&gt;Introduction&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org4044b14"&gt;
 &lt;p&gt;
 This is a demonstration of converting an HTML table into some (possibly) meaningful values. I'm going to pull the data from the Wikipedia page for the &lt;a href="https://en.wikipedia.org/wiki/International_Olympiad_in_Informatics"&gt;International Olympiad in Informatics&lt;/a&gt;. This is their description for it:
 &lt;/p&gt;
@@ -21,9 +21,9 @@ The International Olympiad in Informatics is one of the most prestigious compute
 &lt;/blockquote&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge9120d1" class="outline-2"&gt;
-&lt;h2 id="orge9120d1"&gt;Imports&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orge9120d1"&gt;
+&lt;div id="outline-container-org96d8f46" class="outline-2"&gt;
+&lt;h2 id="org96d8f46"&gt;Imports&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org96d8f46"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# python standard library
 from http import HTTPStatus
 # from pypi
@@ -34,22 +34,22 @@ import pandas
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org3b6fd81" class="outline-2"&gt;
-&lt;h2 id="org3b6fd81"&gt;Constants&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org3b6fd81"&gt;
+&lt;div id="outline-container-org71edf90" class="outline-2"&gt;
+&lt;h2 id="org71edf90"&gt;Constants&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org71edf90"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;class Page:
     url = "https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;amp;oldid=836053213"
     medals_table = 'table.wikitable.sortable'
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org37dbc69" class="outline-2"&gt;
-&lt;h2 id="org37dbc69"&gt;Grabbing the Data&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org37dbc69"&gt;
+&lt;div id="outline-container-org976798f" class="outline-2"&gt;
+&lt;h2 id="org976798f"&gt;Grabbing the Data&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org976798f"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org264229a" class="outline-3"&gt;
-&lt;h3 id="org264229a"&gt;The Page&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org264229a"&gt;
+&lt;div id="outline-container-org215befd" class="outline-3"&gt;
+&lt;h3 id="org215befd"&gt;The Page&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org215befd"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;session = HTMLSession()
 response = session.get(Page.url)
 print(response.status_code)
@@ -62,9 +62,9 @@ soup = BeautifulSoup(response.html.html, 'html.parser')
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgf7d7baa" class="outline-3"&gt;
-&lt;h3 id="orgf7d7baa"&gt;The Medals table&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgf7d7baa"&gt;
+&lt;div id="outline-container-org8a8e129" class="outline-3"&gt;
+&lt;h3 id="org8a8e129"&gt;The Medals table&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org8a8e129"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;table = response.html.find(Page.medals_table, first=True)
 medals_table = pandas.read_html(t.html, header=0,)[0]
 print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
@@ -73,12 +73,12 @@ print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl')
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgb27822d" class="outline-2"&gt;
-&lt;h2 id="orgb27822d"&gt;Questions&lt;/h2&gt;
+&lt;div id="outline-container-orgd20a2d3" class="outline-2"&gt;
+&lt;h2 id="orgd20a2d3"&gt;Questions&lt;/h2&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcb0c463" class="outline-2"&gt;
-&lt;h2 id="orgcb0c463"&gt;Source&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgcb0c463"&gt;
+&lt;div id="outline-container-org27e89f9" class="outline-2"&gt;
+&lt;h2 id="org27e89f9"&gt;Source&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org27e89f9"&gt;
 &lt;p&gt;
 Wikipedia contributors. (2018, April 12). International Olympiad in Informatics. In Wikipedia, The Free Encyclopedia. Retrieved 19:21, April 19, 2018, from &lt;a href="https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;amp;oldid=836053213"&gt;https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;amp;oldid=836053213&lt;/a&gt;
 &lt;/p&gt;

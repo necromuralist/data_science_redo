@@ -120,9 +120,9 @@
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div id="outline-container-org4d5490c" class="outline-2">
-<h2 id="org4d5490c">Introduction</h2>
-<div class="outline-text-2" id="text-org4d5490c">
+    <div id="outline-container-org4044b14" class="outline-2">
+<h2 id="org4044b14">Introduction</h2>
+<div class="outline-text-2" id="text-org4044b14">
 <p>
 This is a demonstration of converting an HTML table into some (possibly) meaningful values. I'm going to pull the data from the Wikipedia page for the <a href="https://en.wikipedia.org/wiki/International_Olympiad_in_Informatics">International Olympiad in Informatics</a>. This is their description for it:
 </p>
@@ -142,9 +142,9 @@ The International Olympiad in Informatics is one of the most prestigious compute
 </blockquote>
 </div>
 </div>
-<div id="outline-container-orge9120d1" class="outline-2">
-<h2 id="orge9120d1">Imports</h2>
-<div class="outline-text-2" id="text-orge9120d1">
+<div id="outline-container-org96d8f46" class="outline-2">
+<h2 id="org96d8f46">Imports</h2>
+<div class="outline-text-2" id="text-org96d8f46">
 <div class="highlight"><pre><span></span># python standard library
 from http import HTTPStatus
 # from pypi
@@ -155,22 +155,22 @@ import pandas
 </pre></div>
 </div>
 </div>
-<div id="outline-container-org3b6fd81" class="outline-2">
-<h2 id="org3b6fd81">Constants</h2>
-<div class="outline-text-2" id="text-org3b6fd81">
+<div id="outline-container-org71edf90" class="outline-2">
+<h2 id="org71edf90">Constants</h2>
+<div class="outline-text-2" id="text-org71edf90">
 <div class="highlight"><pre><span></span>class Page:
     url = "https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213"
     medals_table = 'table.wikitable.sortable'
 </pre></div>
 </div>
 </div>
-<div id="outline-container-org37dbc69" class="outline-2">
-<h2 id="org37dbc69">Grabbing the Data</h2>
-<div class="outline-text-2" id="text-org37dbc69">
+<div id="outline-container-org976798f" class="outline-2">
+<h2 id="org976798f">Grabbing the Data</h2>
+<div class="outline-text-2" id="text-org976798f">
 </div>
-<div id="outline-container-org264229a" class="outline-3">
-<h3 id="org264229a">The Page</h3>
-<div class="outline-text-3" id="text-org264229a">
+<div id="outline-container-org215befd" class="outline-3">
+<h3 id="org215befd">The Page</h3>
+<div class="outline-text-3" id="text-org215befd">
 <div class="highlight"><pre><span></span>session = HTMLSession()
 response = session.get(Page.url)
 print(response.status_code)
@@ -183,9 +183,9 @@ soup = BeautifulSoup(response.html.html, 'html.parser')
 </div>
 </div>
 
-<div id="outline-container-orgf7d7baa" class="outline-3">
-<h3 id="orgf7d7baa">The Medals table</h3>
-<div class="outline-text-3" id="text-orgf7d7baa">
+<div id="outline-container-org8a8e129" class="outline-3">
+<h3 id="org8a8e129">The Medals table</h3>
+<div class="outline-text-3" id="text-org8a8e129">
 <div class="highlight"><pre><span></span>table = response.html.find(Page.medals_table, first=True)
 medals_table = pandas.read_html(t.html, header=0,)[0]
 print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
@@ -194,12 +194,12 @@ print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl')
 </div>
 </div>
 
-<div id="outline-container-orgb27822d" class="outline-2">
-<h2 id="orgb27822d">Questions</h2>
+<div id="outline-container-orgd20a2d3" class="outline-2">
+<h2 id="orgd20a2d3">Questions</h2>
 </div>
-<div id="outline-container-orgcb0c463" class="outline-2">
-<h2 id="orgcb0c463">Source</h2>
-<div class="outline-text-2" id="text-orgcb0c463">
+<div id="outline-container-org27e89f9" class="outline-2">
+<h2 id="org27e89f9">Source</h2>
+<div class="outline-text-2" id="text-org27e89f9">
 <p>
 Wikipedia contributors. (2018, April 12). International Olympiad in Informatics. In Wikipedia, The Free Encyclopedia. Retrieved 19:21, April 19, 2018, from <a href="https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213">https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213</a>
 </p>
