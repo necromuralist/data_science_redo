@@ -1,0 +1,82 @@
+#+BEGIN_COMMENT
+.. title: International Olympiad in Informatics
+.. slug: international-olympiad-in-informatics
+.. date: 2018-04-19 12:14:23 UTC-07:00
+.. tags: data scraping draft
+.. category: data
+.. link: 
+.. description: Some basic data collection about the medals won in the International Olympiad in Informatics
+.. type: text
+#+END_COMMENT
+
+* Introduction
+  This is a demonstration of converting an HTML table into some (possibly) meaningful values. I'm going to pull the data from the Wikipedia page for the [[https://en.wikipedia.org/wiki/International_Olympiad_in_Informatics][International Olympiad in Informatics]]. This is their description for it:
+
+#+BEGIN_QUOTE
+The International Olympiad in Informatics (IOI) is an annual competitive programming competition for secondary school students. It is the second largest olympiad, after International Mathematical Olympiad, in terms of number of participating countries (IOI 2014 saw participation of 84 countries). The first IOI was held in 1989 in Pravetz, Bulgaria.
+
+The contest consists of two days of computer programming and problem-solving of algorithmic nature. To deal with problems involving very large amounts of data, it is necessary to have not only programmers, "but also creative coders, who can dream up what it is that the programmers need to tell the computer to do. The hard part isn't the programming, but the mathematics underneath it."[1] Students at the IOI compete on an individual basis, with up to four students competing from each participating country (with 81 countries in 2012). Students in the national teams are selected through national computing contests, such as the Australian Informatics Olympiad, British Informatics Olympiad, Indian Computing Olympiad or Bundeswettbewerb Informatik (Germany).
+
+The International Olympiad in Informatics is one of the most prestigious computer science competitions in the world. UNESCO and IFIP are patrons.
+#+END_QUOTE
+* Imports
+#+BEGIN_SRC ipython :session olympiad :results none
+# python standard library
+from http import HTTPStatus
+# from pypi
+from bs4 import BeautifulSoup
+from requests_html import HTMLSession
+from tabulate import tabulate
+import pandas
+#+END_SRC
+* Constants
+#+BEGIN_SRC ipython :session olympiad :results none
+class Page:
+    url = "https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&oldid=836053213"
+    medals_table = 'table.wikitable.sortable'
+#+END_SRC
+* Grabbing the Data
+** The Page
+#+BEGIN_SRC ipython :session olympiad :results output
+session = HTMLSession()
+response = session.get(Page.url)
+print(response.status_code)
+assert response.status_code == HTTPStatus.OK
+soup = BeautifulSoup(response.html.html, 'html.parser')
+#+END_SRC
+
+#+RESULTS:
+: 200
+
+#+BEGIN_SRC ipython :session olympiad :results output
+print(soup.body.h1.text)
+#+END_SRC
+
+#+RESULTS:
+: International Olympiad in Informatics
+
+** The Medals table
+#+BEGIN_SRC ipython :session olympiad :results output raw
+table = response.html.find(Page.medals_table, first=True)
+medals_table = pandas.read_html(t.html, header=0,)[0]
+print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
+#+END_SRC
+
+#+RESULTS:
+|  Rank | Nation      | Gold | Silver | Bronze | Total |
+|-------+-------------+------+--------+--------+-------|
+|     1 | China       |   77 |     26 |     12 |   115 |
+|     2 | Russia      |   56 |     36 |     12 |   104 |
+|     3 | USA         |   46 |     34 |     15 |    95 |
+|     4 | Poland      |   38 |     38 |     29 |   105 |
+|     5 | South Korea |   36 |     37 |     26 |    99 |
+|     6 | Romania     |   30 |     45 |     28 |   103 |
+|     7 | Bulgaria    |   25 |     41 |     34 |   100 |
+|     8 | Slovakia    |   24 |     37 |     29 |    90 |
+|     9 | Iran        |   22 |     52 |     22 |    96 |
+|    10 | Japan       |   21 |     20 |      8 |    49 |
+| Total | 375         |  366 |    215 |    956 |   nan |
+
+* Questions
+* Source
+Wikipedia contributors. (2018, April 12). International Olympiad in Informatics. In Wikipedia, The Free Encyclopedia. Retrieved 19:21, April 19, 2018, from https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&oldid=836053213

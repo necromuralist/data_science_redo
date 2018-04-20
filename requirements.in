@@ -1,0 +1,17 @@
+autopep8
+ghp-import2
+jupyter
+networkx
+Nikola
+pandas
+pipdeptree
+pip-tools
+ptpython
+seaborn
+tabulate
+virtualfish
+watchdog
+webassets
+wheel
+ws4py
+yapf
