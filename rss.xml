@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Data Science With Python Re-Do</title><link>https://necromuralist.github.io/data_science_redo/</link><description>A re-do of problems from the Coursera 'Data Science With Python' with alternate problems to avoid violating the student Code of Conduct.</description><atom:link href="https://necromuralist.github.io/data_science_redo/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Fri, 20 Apr 2018 18:44:11 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>International Olympiad in Informatics</title><link>https://necromuralist.github.io/data_science_redo/posts/international-olympiad-in-informatics/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-org4044b14" class="outline-2"&gt;
+&lt;h2 id="org4044b14"&gt;Introduction&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org4044b14"&gt;
+&lt;p&gt;
+This is a demonstration of converting an HTML table into some (possibly) meaningful values. I'm going to pull the data from the Wikipedia page for the &lt;a href="https://en.wikipedia.org/wiki/International_Olympiad_in_Informatics"&gt;International Olympiad in Informatics&lt;/a&gt;. This is their description for it:
+&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;
+The International Olympiad in Informatics (IOI) is an annual competitive programming competition for secondary school students. It is the second largest olympiad, after International Mathematical Olympiad, in terms of number of participating countries (IOI 2014 saw participation of 84 countries). The first IOI was held in 1989 in Pravetz, Bulgaria.
+&lt;/p&gt;
+
+&lt;p&gt;
+The contest consists of two days of computer programming and problem-solving of algorithmic nature. To deal with problems involving very large amounts of data, it is necessary to have not only programmers, "but also creative coders, who can dream up what it is that the programmers need to tell the computer to do. The hard part isn't the programming, but the mathematics underneath it."[1] Students at the IOI compete on an individual basis, with up to four students competing from each participating country (with 81 countries in 2012). Students in the national teams are selected through national computing contests, such as the Australian Informatics Olympiad, British Informatics Olympiad, Indian Computing Olympiad or Bundeswettbewerb Informatik (Germany).
+&lt;/p&gt;
+
+&lt;p&gt;
+The International Olympiad in Informatics is one of the most prestigious computer science competitions in the world. UNESCO and IFIP are patrons.
+&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org96d8f46" class="outline-2"&gt;
+&lt;h2 id="org96d8f46"&gt;Imports&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org96d8f46"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# python standard library
+from http import HTTPStatus
+# from pypi
+from bs4 import BeautifulSoup
+from requests_html import HTMLSession
+from tabulate import tabulate
+import pandas
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org71edf90" class="outline-2"&gt;
+&lt;h2 id="org71edf90"&gt;Constants&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org71edf90"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;class Page:
+    url = "https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;amp;oldid=836053213"
+    medals_table = 'table.wikitable.sortable'
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org976798f" class="outline-2"&gt;
+&lt;h2 id="org976798f"&gt;Grabbing the Data&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org976798f"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org215befd" class="outline-3"&gt;
+&lt;h3 id="org215befd"&gt;The Page&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org215befd"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;session = HTMLSession()
+response = session.get(Page.url)
+print(response.status_code)
+assert response.status_code == HTTPStatus.OK
+soup = BeautifulSoup(response.html.html, 'html.parser')
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;print(soup.body.h1.text)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org8a8e129" class="outline-3"&gt;
+&lt;h3 id="org8a8e129"&gt;The Medals table&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org8a8e129"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;table = response.html.find(Page.medals_table, first=True)
+medals_table = pandas.read_html(t.html, header=0,)[0]
+print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgd20a2d3" class="outline-2"&gt;
+&lt;h2 id="orgd20a2d3"&gt;Questions&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org27e89f9" class="outline-2"&gt;
+&lt;h2 id="org27e89f9"&gt;Source&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org27e89f9"&gt;
+&lt;p&gt;
+Wikipedia contributors. (2018, April 12). International Olympiad in Informatics. In Wikipedia, The Free Encyclopedia. Retrieved 19:21, April 19, 2018, from &lt;a href="https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;amp;oldid=836053213"&gt;https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;amp;oldid=836053213&lt;/a&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description><category>data scraping draft</category><guid>https://necromuralist.github.io/data_science_redo/posts/international-olympiad-in-informatics/</guid><pubDate>Thu, 19 Apr 2018 19:14:23 GMT</pubDate></item></channel></rss>
