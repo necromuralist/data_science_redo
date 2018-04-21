@@ -19,46 +19,54 @@ The contest consists of two days of computer programming and problem-solving of 
 
 The International Olympiad in Informatics is one of the most prestigious computer science competitions in the world. UNESCO and IFIP are patrons.
 #+END_QUOTE
+
+The original assignment did some comparisons between the Summer and Winter Olympics, but since that doesn't apply here I'm going to compare it to the [[https://en.wikipedia.org/wiki/ACM_International_Collegiate_Programming_Contest][ACM International Collegiate Programming Contest]].
 * Imports
 #+BEGIN_SRC ipython :session olympiad :results none
 # python standard library
 from http import HTTPStatus
 # from pypi
-from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 from tabulate import tabulate
 import pandas
 #+END_SRC
 * Constants
 #+BEGIN_SRC ipython :session olympiad :results none
+class ACMPage:
+    url = "https://en.wikipedia.org/wiki/ACM_International_Collegiate_Programming_Contest"
+    by_year = "table.wikitable"
+    by_year_index = 2
+#+END_SRC
+
+#+BEGIN_SRC ipython :session olympiad :results none
 class Page:
     url = "https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&oldid=836053213"
     medals_table = 'table.wikitable.sortable'
+    repeat_winners = "table.wikitable[style='margin:auto']"
 #+END_SRC
 * Grabbing the Data
-** The Page
+** The IOI page Page
 #+BEGIN_SRC ipython :session olympiad :results output
 session = HTMLSession()
-response = session.get(Page.url)
-print(response.status_code)
-assert response.status_code == HTTPStatus.OK
-soup = BeautifulSoup(response.html.html, 'html.parser')
+ioi_response = session.get(Page.url)
+print(ioi_response.status_code)
+assert ioi_response.status_code == HTTPStatus.OK
 #+END_SRC
 
 #+RESULTS:
 : 200
 
 #+BEGIN_SRC ipython :session olympiad :results output
-print(soup.body.h1.text)
+print(ioi_response.html.find("h1", first=True).text)
 #+END_SRC
 
 #+RESULTS:
 : International Olympiad in Informatics
 
-** The Medals table
+*** The Medals table
 #+BEGIN_SRC ipython :session olympiad :results output raw
-table = response.html.find(Page.medals_table, first=True)
-medals_table = pandas.read_html(t.html, header=0,)[0]
+table = ioi_response.html.find(Page.medals_table, first=True)
+medals_table = pandas.read_html(table.html, header=0,)[0]
 print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
 #+END_SRC
 
@@ -76,6 +84,54 @@ print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl')
 |     9 | Iran        |   22 |     52 |     22 |    96 |
 |    10 | Japan       |   21 |     20 |      8 |    49 |
 | Total | 375         |  366 |    215 |    956 |   nan |
+
+*** The Repeat Winners Table
+   This table lists competitors that have won more than once.
+
+#+BEGIN_SRC ipython :session olympiad :results output raw
+repeat_table = ioi_response.html.find(Page.repeat_winners, first=True)
+repeat_table = pandas.read_html(repeat_table.html, header=0)[0]
+print(tabulate(repeat_table.head(), headers='keys', showindex=False, tablefmt='orgtbl'))
+#+END_SRC
+
+#+RESULTS:
+| Name                | Team     | Years      | Unnamed: 3 | Unnamed: 4 | Unnamed: 5 | Unnamed: 6 | Unnamed: 7 | Unnamed: 8 |
+|---------------------+----------+------------+------------+------------+------------+------------+------------+------------|
+| Gennady Korotkevich | Belarus  | G(II) 2012 | GP(I) 2011 | G(I) 2010  | G(I) 2009  |     G 2008 |     G 2007 |     S 2006 |
+| Hristo Venev        | Bulgaria | G 2016     | G 2015     | G 2014     | G 2013     |     S 2012 |        nan |        nan |
+| Filip Wolski        | Poland   | G(I) 2006  | G 2005     | G 2004     | G 2003     |        nan |        nan |        nan |
+| Yuta Takaya         | Japan    | G(I) 2017  | G 2016     | G 2015     | G 2014     |        nan |        nan |        nan |
+| Rares-Darius Buhai  | Romania  | G 2015     | G 2014     | G 2013     | G 2012     |        nan |        nan |        nan |
+
+** The ACM Page
+
+#+BEGIN_SRC ipython :session olympiad :results output
+acm_response = session.get(ACMPage.url)
+assert acm_response.status_code == HTTPStatus.OK
+print(acm_response.html.find("h1", first=True).text)
+#+END_SRC
+
+#+RESULTS:
+: ACM International Collegiate Programming Contest
+
+** The Winner by Year
+   The tables on this page don't really have enough information to select them directly so you have to know which one of them to grab (e.g. the first, second, etc.).
+
+#+BEGIN_SRC ipython :session olympiad :results output raw
+acm_by_year = acm_response.html.find(ACMPage.by_year)[ACMPage.by_year_index]
+acm_by_year = pandas.read_html(acm_by_year.html, header=0)[0]
+print(tabulate(acm_by_year.head(), headers='keys', showindex=False,
+               tablefmt='orgtbl'))
+#+END_SRC
+
+#+RESULTS:
+| Year | Country | Institution                                                                         |
+|------+---------+-------------------------------------------------------------------------------------|
+| 2018 | Russia  | Moscow State University                                                             |
+| 2017 | Russia  | Saint Petersburg State University of Information Technologies, Mechanics and Optics |
+| 2016 | Russia  | St. Petersburg State University                                                     |
+| 2015 | Russia  | Saint Petersburg State University of Information Technologies, Mechanics and Optics |
+| 2014 | Russia  | St. Petersburg State University                                                     |
 
 * Questions
 * Source

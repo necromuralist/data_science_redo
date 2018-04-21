@@ -3,10 +3,11 @@ ghp-import2
 jupyter
 networkx
 Nikola
-pandas
-pipdeptree
 pip-tools
+pipdeptree
+pkg-resources
 ptpython
+requests-html
 seaborn
 tabulate
 virtualfish

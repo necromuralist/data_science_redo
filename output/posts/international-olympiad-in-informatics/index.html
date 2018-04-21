@@ -120,9 +120,9 @@
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div id="outline-container-org4044b14" class="outline-2">
-<h2 id="org4044b14">Introduction</h2>
-<div class="outline-text-2" id="text-org4044b14">
+    <div id="outline-container-orgd7c22bc" class="outline-2">
+<h2 id="orgd7c22bc">Introduction</h2>
+<div class="outline-text-2" id="text-orgd7c22bc">
 <p>
 This is a demonstration of converting an HTML table into some (possibly) meaningful values. I'm going to pull the data from the Wikipedia page for the <a href="https://en.wikipedia.org/wiki/International_Olympiad_in_Informatics">International Olympiad in Informatics</a>. This is their description for it:
 </p>
@@ -140,66 +140,114 @@ The contest consists of two days of computer programming and problem-solving of 
 The International Olympiad in Informatics is one of the most prestigious computer science competitions in the world. UNESCO and IFIP are patrons.
 </p>
 </blockquote>
+
+<p>
+The original assignment did some comparisons between the Summer and Winter Olympics, but since that doesn't apply here I'm going to compare it to the <a href="https://en.wikipedia.org/wiki/ACM_International_Collegiate_Programming_Contest">ACM International Collegiate Programming Contest</a>.
+</p>
 </div>
 </div>
-<div id="outline-container-org96d8f46" class="outline-2">
-<h2 id="org96d8f46">Imports</h2>
-<div class="outline-text-2" id="text-org96d8f46">
+<div id="outline-container-orgbc5942c" class="outline-2">
+<h2 id="orgbc5942c">Imports</h2>
+<div class="outline-text-2" id="text-orgbc5942c">
 <div class="highlight"><pre><span></span># python standard library
 from http import HTTPStatus
 # from pypi
-from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 from tabulate import tabulate
 import pandas
 </pre></div>
 </div>
 </div>
-<div id="outline-container-org71edf90" class="outline-2">
-<h2 id="org71edf90">Constants</h2>
-<div class="outline-text-2" id="text-org71edf90">
+<div id="outline-container-org0f47331" class="outline-2">
+<h2 id="org0f47331">Constants</h2>
+<div class="outline-text-2" id="text-org0f47331">
+<div class="highlight"><pre><span></span>class ACMPage:
+    url = "https://en.wikipedia.org/wiki/ACM_International_Collegiate_Programming_Contest"
+    by_year = "table.wikitable"
+    by_year_index = 2
+</pre></div>
+
 <div class="highlight"><pre><span></span>class Page:
     url = "https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213"
     medals_table = 'table.wikitable.sortable'
+    repeat_winners = "table.wikitable[style='margin:auto']"
 </pre></div>
 </div>
 </div>
-<div id="outline-container-org976798f" class="outline-2">
-<h2 id="org976798f">Grabbing the Data</h2>
-<div class="outline-text-2" id="text-org976798f">
+<div id="outline-container-orge1d1bb6" class="outline-2">
+<h2 id="orge1d1bb6">Grabbing the Data</h2>
+<div class="outline-text-2" id="text-orge1d1bb6">
 </div>
-<div id="outline-container-org215befd" class="outline-3">
-<h3 id="org215befd">The Page</h3>
-<div class="outline-text-3" id="text-org215befd">
+<div id="outline-container-orgd4db8dd" class="outline-3">
+<h3 id="orgd4db8dd">The IOI page Page</h3>
+<div class="outline-text-3" id="text-orgd4db8dd">
 <div class="highlight"><pre><span></span>session = HTMLSession()
-response = session.get(Page.url)
-print(response.status_code)
-assert response.status_code == HTTPStatus.OK
-soup = BeautifulSoup(response.html.html, 'html.parser')
+ioi_response = session.get(Page.url)
+print(ioi_response.status_code)
+assert ioi_response.status_code == HTTPStatus.OK
 </pre></div>
 
-<div class="highlight"><pre><span></span>print(soup.body.h1.text)
+<div class="highlight"><pre><span></span>print(ioi_response.html.find("h1", first=True).text)
 </pre></div>
 </div>
-</div>
 
-<div id="outline-container-org8a8e129" class="outline-3">
-<h3 id="org8a8e129">The Medals table</h3>
-<div class="outline-text-3" id="text-org8a8e129">
-<div class="highlight"><pre><span></span>table = response.html.find(Page.medals_table, first=True)
-medals_table = pandas.read_html(t.html, header=0,)[0]
+<div id="outline-container-org167cef5" class="outline-4">
+<h4 id="org167cef5">The Medals table</h4>
+<div class="outline-text-4" id="text-org167cef5">
+<div class="highlight"><pre><span></span>table = ioi_response.html.find(Page.medals_table, first=True)
+medals_table = pandas.read_html(table.html, header=0,)[0]
 print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
 </pre></div>
 </div>
 </div>
+
+<div id="outline-container-org72d4f35" class="outline-4">
+<h4 id="org72d4f35">The Repeat Winners Table</h4>
+<div class="outline-text-4" id="text-org72d4f35">
+<p>
+This table lists competitors that have won more than once.
+</p>
+
+<div class="highlight"><pre><span></span>repeat_table = ioi_response.html.find(Page.repeat_winners, first=True)
+repeat_table = pandas.read_html(repeat_table.html, header=0)[0]
+print(tabulate(repeat_table.head(), headers='keys', showindex=False, tablefmt='orgtbl'))
+</pre></div>
+</div>
+</div>
 </div>
 
-<div id="outline-container-orgd20a2d3" class="outline-2">
-<h2 id="orgd20a2d3">Questions</h2>
+<div id="outline-container-org5d813f2" class="outline-3">
+<h3 id="org5d813f2">The ACM Page</h3>
+<div class="outline-text-3" id="text-org5d813f2">
+<div class="highlight"><pre><span></span>acm_response = session.get(ACMPage.url)
+assert acm_response.status_code == HTTPStatus.OK
+print(acm_response.html.find("h1", first=True).text)
+</pre></div>
 </div>
-<div id="outline-container-org27e89f9" class="outline-2">
-<h2 id="org27e89f9">Source</h2>
-<div class="outline-text-2" id="text-org27e89f9">
+</div>
+
+<div id="outline-container-org6d232e5" class="outline-3">
+<h3 id="org6d232e5">The Winner by Year</h3>
+<div class="outline-text-3" id="text-org6d232e5">
+<p>
+The tables on this page don't really have enough information to select them directly so you have to know which one of them to grab (e.g. the first, second, etc.).
+</p>
+
+<div class="highlight"><pre><span></span>acm_by_year = acm_response.html.find(ACMPage.by_year)[ACMPage.by_year_index]
+acm_by_year = pandas.read_html(acm_by_year.html, header=0)[0]
+print(tabulate(acm_by_year.head(), headers='keys', showindex=False,
+	       tablefmt='orgtbl'))
+</pre></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org79f95df" class="outline-2">
+<h2 id="org79f95df">Questions</h2>
+</div>
+<div id="outline-container-orga62639c" class="outline-2">
+<h2 id="orga62639c">Source</h2>
+<div class="outline-text-2" id="text-orga62639c">
 <p>
 Wikipedia contributors. (2018, April 12). International Olympiad in Informatics. In Wikipedia, The Free Encyclopedia. Retrieved 19:21, April 19, 2018, from <a href="https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213">https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213</a>
 </p>
