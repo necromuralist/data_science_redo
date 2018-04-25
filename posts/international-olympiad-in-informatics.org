@@ -85,6 +85,46 @@ print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl')
 |    10 | Japan       |   21 |     20 |      8 |    49 |
 | Total | 375         |  366 |    215 |    956 |   nan |
 
+We don't want the totals row so I'll delete it, along with the Total column and the Rank.
+
+#+BEGIN_SRC ipython :session olympiad :results output raw
+medals_table = medals_table[medals_table.Rank != "Total"]
+del medals_table["Total"]
+del medals_table["Rank"]
+print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
+#+END_SRC
+
+#+RESULTS:
+| Nation      | Gold | Silver | Bronze |
+|-------------+------+--------+--------|
+| China       |   77 |     26 |     12 |
+| Russia      |   56 |     36 |     12 |
+| USA         |   46 |     34 |     15 |
+| Poland      |   38 |     38 |     29 |
+| South Korea |   36 |     37 |     26 |
+| Romania     |   30 |     45 |     28 |
+| Bulgaria    |   25 |     41 |     34 |
+| Slovakia    |   24 |     37 |     29 |
+| Iran        |   22 |     52 |     22 |
+| Japan       |   21 |     20 |      8 |
+
+I guess I don't need the row totals either.
+
+#+BEGIN_SRC ipython :session olympiad :results output raw
+print(medals_table.describe())
+#+END_SRC
+
+#+RESULTS:
+            Gold    Silver     Bronze       Total
+count  10.000000  10.00000  10.000000   10.000000
+mean   37.500000  36.60000  21.500000   95.600000
+std    17.902514   8.97156   9.046178   17.715028
+min    21.000000  20.00000   8.000000   49.000000
+25%    24.250000  34.50000  12.750000   95.250000
+50%    33.000000  37.00000  24.000000   99.500000
+75%    44.000000  40.25000  28.750000  103.750000
+max    77.000000  52.00000  34.000000  115.000000
+
 *** The Repeat Winners Table
    This table lists competitors that have won more than once.
 
