@@ -120,9 +120,9 @@
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div id="outline-container-orgd7c22bc" class="outline-2">
-<h2 id="orgd7c22bc">Introduction</h2>
-<div class="outline-text-2" id="text-orgd7c22bc">
+    <div id="outline-container-org5c80c55" class="outline-2">
+<h2 id="org5c80c55">Introduction</h2>
+<div class="outline-text-2" id="text-org5c80c55">
 <p>
 This is a demonstration of converting an HTML table into some (possibly) meaningful values. I'm going to pull the data from the Wikipedia page for the <a href="https://en.wikipedia.org/wiki/International_Olympiad_in_Informatics">International Olympiad in Informatics</a>. This is their description for it:
 </p>
@@ -146,9 +146,9 @@ The original assignment did some comparisons between the Summer and Winter Olymp
 </p>
 </div>
 </div>
-<div id="outline-container-orgbc5942c" class="outline-2">
-<h2 id="orgbc5942c">Imports</h2>
-<div class="outline-text-2" id="text-orgbc5942c">
+<div id="outline-container-orgc58d164" class="outline-2">
+<h2 id="orgc58d164">Imports</h2>
+<div class="outline-text-2" id="text-orgc58d164">
 <div class="highlight"><pre><span></span># python standard library
 from http import HTTPStatus
 # from pypi
@@ -158,9 +158,9 @@ import pandas
 </pre></div>
 </div>
 </div>
-<div id="outline-container-org0f47331" class="outline-2">
-<h2 id="org0f47331">Constants</h2>
-<div class="outline-text-2" id="text-org0f47331">
+<div id="outline-container-org0b65610" class="outline-2">
+<h2 id="org0b65610">Constants</h2>
+<div class="outline-text-2" id="text-org0b65610">
 <div class="highlight"><pre><span></span>class ACMPage:
     url = "https://en.wikipedia.org/wiki/ACM_International_Collegiate_Programming_Contest"
     by_year = "table.wikitable"
@@ -174,13 +174,13 @@ import pandas
 </pre></div>
 </div>
 </div>
-<div id="outline-container-orge1d1bb6" class="outline-2">
-<h2 id="orge1d1bb6">Grabbing the Data</h2>
-<div class="outline-text-2" id="text-orge1d1bb6">
+<div id="outline-container-orgf2e3748" class="outline-2">
+<h2 id="orgf2e3748">Grabbing the Data</h2>
+<div class="outline-text-2" id="text-orgf2e3748">
 </div>
-<div id="outline-container-orgd4db8dd" class="outline-3">
-<h3 id="orgd4db8dd">The IOI page Page</h3>
-<div class="outline-text-3" id="text-orgd4db8dd">
+<div id="outline-container-org229eb1c" class="outline-3">
+<h3 id="org229eb1c">The IOI page Page</h3>
+<div class="outline-text-3" id="text-org229eb1c">
 <div class="highlight"><pre><span></span>session = HTMLSession()
 ioi_response = session.get(Page.url)
 print(ioi_response.status_code)
@@ -191,19 +191,47 @@ assert ioi_response.status_code == HTTPStatus.OK
 </pre></div>
 </div>
 
-<div id="outline-container-org167cef5" class="outline-4">
-<h4 id="org167cef5">The Medals table</h4>
-<div class="outline-text-4" id="text-org167cef5">
+<div id="outline-container-org7bb3ac6" class="outline-4">
+<h4 id="org7bb3ac6">The Medals table</h4>
+<div class="outline-text-4" id="text-org7bb3ac6">
 <div class="highlight"><pre><span></span>table = ioi_response.html.find(Page.medals_table, first=True)
 medals_table = pandas.read_html(table.html, header=0,)[0]
 print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
 </pre></div>
+
+<p>
+We don't want the totals row so I'll delete it, along with the Total column and the Rank.
+</p>
+
+<div class="highlight"><pre><span></span>medals_table = medals_table[medals_table.Rank != "Total"]
+del medals_table["Total"]
+del medals_table["Rank"]
+print(tabulate(medals_table, headers='keys', showindex=False, tablefmt='orgtbl'))
+</pre></div>
+
+<p>
+I guess I don't need the row totals either.
+</p>
+
+<div class="highlight"><pre><span></span>print(medals_table.describe())
+</pre></div>
+<p>
+            Gold    Silver     Bronze       Total
+count  10.000000  10.00000  10.000000   10.000000
+mean   37.500000  36.60000  21.500000   95.600000
+std    17.902514   8.97156   9.046178   17.715028
+min    21.000000  20.00000   8.000000   49.000000
+25%    24.250000  34.50000  12.750000   95.250000
+50%    33.000000  37.00000  24.000000   99.500000
+75%    44.000000  40.25000  28.750000  103.750000
+max    77.000000  52.00000  34.000000  115.000000
+</p>
 </div>
 </div>
 
-<div id="outline-container-org72d4f35" class="outline-4">
-<h4 id="org72d4f35">The Repeat Winners Table</h4>
-<div class="outline-text-4" id="text-org72d4f35">
+<div id="outline-container-orgf15268a" class="outline-4">
+<h4 id="orgf15268a">The Repeat Winners Table</h4>
+<div class="outline-text-4" id="text-orgf15268a">
 <p>
 This table lists competitors that have won more than once.
 </p>
@@ -216,9 +244,9 @@ print(tabulate(repeat_table.head(), headers='keys', showindex=False, tablefmt='o
 </div>
 </div>
 
-<div id="outline-container-org5d813f2" class="outline-3">
-<h3 id="org5d813f2">The ACM Page</h3>
-<div class="outline-text-3" id="text-org5d813f2">
+<div id="outline-container-org26eacd5" class="outline-3">
+<h3 id="org26eacd5">The ACM Page</h3>
+<div class="outline-text-3" id="text-org26eacd5">
 <div class="highlight"><pre><span></span>acm_response = session.get(ACMPage.url)
 assert acm_response.status_code == HTTPStatus.OK
 print(acm_response.html.find("h1", first=True).text)
@@ -226,9 +254,9 @@ print(acm_response.html.find("h1", first=True).text)
 </div>
 </div>
 
-<div id="outline-container-org6d232e5" class="outline-3">
-<h3 id="org6d232e5">The Winner by Year</h3>
-<div class="outline-text-3" id="text-org6d232e5">
+<div id="outline-container-org303a37a" class="outline-3">
+<h3 id="org303a37a">The Winner by Year</h3>
+<div class="outline-text-3" id="text-org303a37a">
 <p>
 The tables on this page don't really have enough information to select them directly so you have to know which one of them to grab (e.g. the first, second, etc.).
 </p>
@@ -242,12 +270,12 @@ print(tabulate(acm_by_year.head(), headers='keys', showindex=False,
 </div>
 </div>
 
-<div id="outline-container-org79f95df" class="outline-2">
-<h2 id="org79f95df">Questions</h2>
+<div id="outline-container-org114aebf" class="outline-2">
+<h2 id="org114aebf">Questions</h2>
 </div>
-<div id="outline-container-orga62639c" class="outline-2">
-<h2 id="orga62639c">Source</h2>
-<div class="outline-text-2" id="text-orga62639c">
+<div id="outline-container-org7145e0d" class="outline-2">
+<h2 id="org7145e0d">Source</h2>
+<div class="outline-text-2" id="text-org7145e0d">
 <p>
 Wikipedia contributors. (2018, April 12). International Olympiad in Informatics. In Wikipedia, The Free Encyclopedia. Retrieved 19:21, April 19, 2018, from <a href="https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213">https://en.wikipedia.org/w/index.php?title=International_Olympiad_in_Informatics&amp;oldid=836053213</a>
 </p>
