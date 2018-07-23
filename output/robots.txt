@@ -1,4 +1,0 @@
-Sitemap: https://necromuralist.github.io/data_science_redo/sitemapindex.xml
-
-User-Agent: *
-Host: necromuralist.github.io
