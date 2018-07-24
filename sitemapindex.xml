@@ -7,18 +7,26 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
   <loc>https://necromuralist.github.io/data_science_redo/categories/cat_data.xml</loc>
-  <lastmod>2018-04-20T18:44:00Z</lastmod>
+  <lastmod>2018-07-23T21:36:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://necromuralist.github.io/data_science_redo/categories/cat_textprocessing.xml</loc>
+  <lastmod>2018-07-23T21:36:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/data_science_redo/categories/data-scraping-draft.xml</loc>
-  <lastmod>2018-04-20T18:44:00Z</lastmod>
+  <lastmod>2018-07-23T21:36:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://necromuralist.github.io/data_science_redo/categories/textprocessing-datacleaning.xml</loc>
+  <lastmod>2018-07-23T21:36:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/data_science_redo/rss.xml</loc>
-  <lastmod>2018-04-20T18:44:00Z</lastmod>
+  <lastmod>2018-07-23T21:36:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/data_science_redo/sitemap.xml</loc>
-  <lastmod>2018-04-20T18:44:00Z</lastmod>
+  <lastmod>2018-07-23T21:36:00Z</lastmod>
  </sitemap>
 </sitemapindex>
